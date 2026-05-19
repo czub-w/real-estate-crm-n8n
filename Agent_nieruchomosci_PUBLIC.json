@@ -1,0 +1,429 @@
+{
+  "name": "Agent nieruchomości",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nowy-klient",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        144
+      ],
+      "id": "dd8828d5-546a-4719-9574-08403c9eea49",
+      "name": "Webhook",
+      "webhookId": "2740fbb2-53e8-47f3-854e-9f29796985d2"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Nowy klient",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID/YOUR_AIRTABLE_TABLE_ID"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Imie": "={{ $json.body.data.fields[0].value }}",
+            "Numer telefonu": "={{ $json.body.data.fields[1].value }}",
+            "Adres": "={{ $json.body.data.fields[2].value }}",
+            "Data": "={{ $json.body.data.fields[3].value }} {{ $json.body.data.fields[4].value }}",
+            "Mail Agenta": "={{ $json.body.data.fields[5].value }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Imie",
+              "displayName": "Imie",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Numer telefonu",
+              "displayName": "Numer telefonu",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Adres",
+              "displayName": "Adres",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mail Agenta",
+              "displayName": "Mail Agenta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Czas stworzenia",
+              "displayName": "Czas stworzenia",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Sms 1845",
+              "displayName": "Sms 1845",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Sms 900",
+              "displayName": "Sms 900",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -256,
+        144
+      ],
+      "id": "6d278b3e-30bd-4f80-8ed7-c14847fe861a",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "S4rsJ8yt1gCj3eYN",
+          "name": "czub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields[\"Mail Agenta\"] }}",
+        "subject": "=Umówione spotkanie : {{ $('Webhook').item.json.body.data.fields[0].value }} {{ $('Webhook').item.json.body.data.fields[2].value }} {{ $('Webhook').item.json.body.data.fields[3].value }} {{ $('Webhook').item.json.body.data.fields[4].value }}",
+        "message": "=<h3>✅ Spotkanie zostało dodane do systemu.</h3>  Cześć,<br> Oto szczegóły spotkania, które właśnie wprowadziłeś/aś: <br><br>  <b>Klient:</b> <br> <b>Numer:</b>{{ $('Webhook').item.json.body.data.fields[1].value }} <br> <b>Adres:</b>{{ $('Webhook').item.json.body.data.fields[2].value }} <br> <b>Termin:</b> {{ $('Webhook').item.json.body.data.fields[3].value }} o godz. {{ $('Webhook').item.json.body.data.fields[4].value }}<br> <br>  Zaproszenie do kalendarza powinno zaraz pojawić się na Twojej skrzynce.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        144,
+        -224
+      ],
+      "id": "6e3de3bb-fc9f-42a2-a0cc-2e0e208620f5",
+      "name": "Send a message",
+      "webhookId": "a50a14fb-5c43-46f6-9067-ba3698c147c1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "RyxNefWCNcsQeRAo",
+          "name": "czub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID",
+          "mode": "list",
+          "cachedResultName": "Bot n8n"
+        },
+        "start": "={{ $('Webhook').item.json.body.data.fields[3].value }}T{{ $('Webhook').item.json.body.data.fields[4].value }}",
+        "end": "={{ new Date(new Date($('Webhook').item.json.body.data.fields[3].value + 'T' + $('Webhook').item.json.body.data.fields[4].value).getTime() - 60*60*1000).toISOString() }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $('Webhook').item.json.body.data.fields[5].value }}"
+          ],
+          "location": "={{ $('Webhook').item.json.body.data.fields[2].value }}",
+          "summary": "=Spotkanie: {{ $('Webhook').item.json.body.data.fields[0].value }} Adres {{ $('Webhook').item.json.body.data.fields[2].value }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        -48
+      ],
+      "id": "a0198c07-c98c-4b7c-8b82-f3de72213021",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Y5WX8l70pddGMf0h",
+          "name": "czub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "timezone": "Europe/Warsaw"
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        144,
+        144
+      ],
+      "id": "16770c74-dc13-4582-9479-8b5ad36d2322",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "resume": "specificTime",
+        "dateTime": "={{ new Date(new Date($json.currentDate).getTime() + 5 * 60 * 1000).toISOString() }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        144
+      ],
+      "id": "66554c69-7c2b-493c-99e0-981f90932736",
+      "name": "czekaj 5min",
+      "webhookId": "a41bd6c7-cf57-4792-a520-57b47d17d459"
+    },
+    {
+      "parameters": {
+        "url": "https://app.sms8.io/services/send.php",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "YOUR_SMS8_API_KEY"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Create a record').item.json.fields['Numer telefonu'] }}"
+            },
+            {
+              "name": "message",
+              "value": "=Dziękuję za rozmowę!\nProszę o zapisanie mojego numeru, w celu łatwiejszego kontaktu.\nSzymon Zygmunt | DENALI GROUP"
+            },
+            {
+              "name": "devices",
+              "value": "YOUR_DEVICE_ID"
+            },
+            {
+              "name": "type",
+              "value": "sms"
+            },
+            {
+              "name": "prioritize",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        144
+      ],
+      "id": "b07ce601-d683-4afb-8a71-5bce68410a80",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "YOUR_CLIENT_CRM_API_ENDPOINT",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "YOUR_CLIENT_CRM_API_KEY"
+            },
+            {
+              "name": "appname",
+              "value": "N8N"
+            },
+            {
+              "name": "title",
+              "value": "=Spotkanie pozyskowe z {{ $('Create a record').item.json.fields.Imie }} | {{ $('Create a record').item.json.fields.Adres }}"
+            },
+            {
+              "name": "description",
+              "value": "=Adres: {{ $json.location }}\n\nSpotkanie zostało utworzone automatycznie. "
+            },
+            {
+              "name": "date_start",
+              "value": "={{ $('Create an event').item.json.start.dateTime ? $('Create an event').item.json.start.dateTime.substring(0,10) : $('Create an event').item.json.start.date }}"
+            },
+            {
+              "name": "time_start",
+              "value": "={{ $('Create an event').item.json.start.dateTime ? $('Create an event').item.json.start.dateTime.substring(11,16) : '00:00' }}"
+            },
+            {
+              "name": "date_end",
+              "value": "={{ $('Create an event').item.json.end.dateTime ? $('Create an event').item.json.end.dateTime.substring(0,10) : $('Create an event').item.json.end.date }}"
+            },
+            {
+              "name": "time_end",
+              "value": "={{ $('Create an event').item.json.end.dateTime ? $('Create an event').item.json.end.dateTime.substring(11,16) : '00:00' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        352,
+        -48
+      ],
+      "id": "0a8818c5-cb66-4d44-af19-570cf6335375",
+      "name": "HTTP Request2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "czekaj 5min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "czekaj 5min": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b274fab9-db60-47a6-98c7-6237b008a9a7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3f64a67f97134d2e1ccac25403d2852f300699c77d05f409295faa0c57f16da7"
+  },
+  "id": "E4Gvp7pMLNrbB2WO",
+  "tags": []
+}

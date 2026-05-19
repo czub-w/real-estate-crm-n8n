@@ -1,0 +1,616 @@
+{
+  "name": "SMS 18:45 + SMS 9:00",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9,
+              "triggerAtMinute": 2
+            },
+            {
+              "triggerAtHour": 18,
+              "triggerAtMinute": 47
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        96
+      ],
+      "id": "f3148393-455a-45fe-8d81-8ff8cdb0757d",
+      "name": "Odpal co godzinę"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Nowy klient",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID/YOUR_AIRTABLE_TABLE_ID"
+        },
+        "filterByFormula": "=AND(\n  IS_SAME(SET_TIMEZONE(NOW(), 'Europe/Warsaw'), {Czas stworzenia}, 'day'),\n  TIMESTR(SET_TIMEZONE(NOW(), 'Europe/Warsaw')) >= '18:45:00',\n  {Sms 1845} = 0\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "9a58b385-1318-4266-9d66-92aae561d4e9",
+      "name": "Czy SMS 1845",
+      "executeOnce": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "S4rsJ8yt1gCj3eYN",
+          "name": "czub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Nowy klient",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID/YOUR_AIRTABLE_TABLE_ID"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sms 1845": true,
+            "id": "={{ $('Czy SMS 1845').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Imie",
+              "displayName": "Imie",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numer telefonu",
+              "displayName": "Numer telefonu",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Adres",
+              "displayName": "Adres",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mail Agenta",
+              "displayName": "Mail Agenta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Czas stworzenia",
+              "displayName": "Czas stworzenia",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Sms 1845",
+              "displayName": "Sms 1845",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Sms 900",
+              "displayName": "Sms 900",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        608,
+        0
+      ],
+      "id": "7db6afab-65a3-4b64-8fdc-49de9c169710",
+      "name": "Zaznacz checkbox 1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "S4rsJ8yt1gCj3eYN",
+          "name": "czub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Nowy klient",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID/YOUR_AIRTABLE_TABLE_ID"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sms 900": true,
+            "id": "={{ $('Czy SMS 900').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Imie",
+              "displayName": "Imie",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numer telefonu",
+              "displayName": "Numer telefonu",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Adres",
+              "displayName": "Adres",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mail Agenta",
+              "displayName": "Mail Agenta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Czas stworzenia",
+              "displayName": "Czas stworzenia",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Sms 1845",
+              "displayName": "Sms 1845",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Sms 900",
+              "displayName": "Sms 900",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        832,
+        176
+      ],
+      "id": "1393873e-f2ef-4b08-96ed-5dc5166a9141",
+      "name": "Zaznacz checkbox 2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "S4rsJ8yt1gCj3eYN",
+          "name": "czub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Nowy klient",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/YOUR_AIRTABLE_BASE_ID/YOUR_AIRTABLE_TABLE_ID"
+        },
+        "filterByFormula": "=AND(\n  IS_SAME(SET_TIMEZONE(NOW(), 'Europe/Warsaw'), {Data}, 'day'),\n  TIMESTR(SET_TIMEZONE(NOW(), 'Europe/Warsaw')) >= '09:00:00',\n  {Sms 900} = 0\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        192,
+        176
+      ],
+      "id": "8f2aa5a6-ad53-4bf7-a743-a3dd3e6c778e",
+      "name": "Czy SMS 900",
+      "executeOnce": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "S4rsJ8yt1gCj3eYN",
+          "name": "czub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://app.sms8.io/services/send.php",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "YOUR_SMS8_API_KEY"
+            },
+            {
+              "name": "number",
+              "value": "={{ $json['Numer telefonu'] }}"
+            },
+            {
+              "name": "message",
+              "value": "=Nie wspomniałem wcześniej -\nhttps://www.instagram.com/agentszymonzygmunt - tutaj można znaleźć przykłady mojej codziennej pracy w nieruchomościach, warto zerknąć przed spotkaniem;) \n"
+            },
+            {
+              "name": "devices",
+              "value": "YOUR_DEVICE_ID"
+            },
+            {
+              "name": "type",
+              "value": "sms"
+            },
+            {
+              "name": "prioritize",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "de1d4deb-3441-4c8f-b02f-deb440c3be12",
+      "name": "SMS nr2"
+    },
+    {
+      "parameters": {
+        "url": "https://app.sms8.io/services/send.php",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "YOUR_SMS8_API_KEY"
+            },
+            {
+              "name": "number",
+              "value": "={{ $('Czy SMS 900').item.json['Numer telefonu'] }}"
+            },
+            {
+              "name": "message",
+              "value": "=Przypominam o naszym spotkaniu dziś o {{ $('Date & Time').item.json.godzinaDATA }}:{{ $json.minDATA }} pod adresem {{ $('Czy SMS 900').item.json.Adres }}.\nDo zobaczenia!"
+            },
+            {
+              "name": "devices",
+              "value": "YOUR_DEVICE_ID"
+            },
+            {
+              "name": "type",
+              "value": "sms"
+            },
+            {
+              "name": "prioritize",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        176
+      ],
+      "id": "11882e02-2a67-49e4-9f8f-455b80891e37",
+      "name": "SMS nr3"
+    },
+    {
+      "parameters": {
+        "operation": "extractDate",
+        "date": "={{ $json.Data }}",
+        "part": "hour",
+        "outputFieldName": "godzinaDATA",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        368,
+        176
+      ],
+      "id": "3a4a7211-ed88-4f35-b477-affe8a7aee3a",
+      "name": "Date & Time",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "extractDate",
+        "date": "={{ $('Czy SMS 900').item.json.Data }}",
+        "part": "minute",
+        "outputFieldName": "minDATA",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        512,
+        176
+      ],
+      "id": "4077ee22-6fc1-42c1-a7bd-739166a91e10",
+      "name": "Date & Time1",
+      "executeOnce": false
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Odpal co godzinę": {
+      "main": [
+        [
+          {
+            "node": "Czy SMS 1845",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Czy SMS 900",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Czy SMS 1845": {
+      "main": [
+        [
+          {
+            "node": "SMS nr2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zaznacz checkbox 1": {
+      "main": [
+        []
+      ]
+    },
+    "Czy SMS 900": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SMS nr2": {
+      "main": [
+        [
+          {
+            "node": "Zaznacz checkbox 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SMS nr3": {
+      "main": [
+        [
+          {
+            "node": "Zaznacz checkbox 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Date & Time1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time1": {
+      "main": [
+        [
+          {
+            "node": "SMS nr3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "410ebc3c-aaff-445b-ad3f-96127544cb60",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3f64a67f97134d2e1ccac25403d2852f300699c77d05f409295faa0c57f16da7"
+  },
+  "id": "FzgFU2hykB5fqFut",
+  "tags": []
+}
